@@ -5,5 +5,5 @@ updates:
     schedule:
       interval: "weekly"
     ignore:
-      - dependency-name: "docker.io/library/golang"
-      - dependency-name: "docker.io/library/gradle"
+      - dependency-name: "library/golang"
+      - dependency-name: "library/gradle"
