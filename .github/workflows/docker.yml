@@ -12,6 +12,7 @@ jobs:
     outputs:
       version: ${{ steps.set-matrix.outputs.version }}
       build_matrix: ${{ steps.set-matrix.outputs.build_matrix }}
+      name: ${{ steps.set-matrix.outputs.name }}
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -35,6 +36,7 @@ jobs:
           fi
         fi
         echo "version=$(echo ${VERSION})" >> $GITHUB_OUTPUT
+        echo "name=$(echo ${GITHUB_REPOSITORY} | cut -f2 -d '/')" >> $GITHUB_OUTPUT
         echo "build_matrix=$(cat .github/platforms.json)" >> $GITHUB_OUTPUT
 
   Build:
@@ -65,15 +67,16 @@ jobs:
         BUILD_NR: ${{ github.run_number }}
         PLATFORM: ${{ matrix.platforms }}
         VERSION: ${{ needs.Setup.outputs.version }}
+        NAME: ${{ needs.Setup.outputs.name }}
       run: |
         ARCH=$(echo "${PLATFORM}" | awk -F  "/" '{print $2$3}')
         echo ""
         echo "============================================================="
-        echo "Building: ${DOCKER_USER}/porkbun-ddns:${VERSION}-${ARCH}-${BUILD_NR}"
+        echo "Building: ${DOCKER_USER}/${NAME}:${VERSION}-${ARCH}-${BUILD_NR}"
         echo "============================================================="
         echo ""
         docker buildx build \
-          --tag "${DOCKER_USER}/porkbun-ddns:${VERSION}-${ARCH}-${BUILD_NR}" \
+          --tag "${DOCKER_USER}/${NAME}:${VERSION}-${ARCH}-${BUILD_NR}" \
           --platform ${PLATFORM} \
           --build-arg PORKBUN_DDNS_VERSION=${VERSION} \
           --load \
@@ -93,18 +96,19 @@ jobs:
         BUILD_NR: ${{ github.run_number }}
         PLATFORM: ${{ matrix.platforms }}
         VERSION: ${{ needs.Setup.outputs.version }}
+        NAME: ${{ needs.Setup.outputs.name }}
       run: |
         ARCH=$(echo "${PLATFORM}" | awk -F  "/" '{print $2$3}')
         echo ""
         echo "============================================================="
-        echo "Pushing: ${DOCKER_USER}/porkbun-ddns:${VERSION}-${ARCH}-${BUILD_NR}"
+        echo "Pushing: ${DOCKER_USER}/${NAME}:${VERSION}-${ARCH}-${BUILD_NR}"
         echo "============================================================="
         echo ""
-        docker tag "${DOCKER_USER}/porkbun-ddns:${VERSION}-${ARCH}-${BUILD_NR}" "${DOCKER_USER}/porkbun-ddns:${VERSION}-${ARCH}"
-        docker tag "${DOCKER_USER}/porkbun-ddns:${VERSION}-${ARCH}-${BUILD_NR}" "${DOCKER_USER}/porkbun-ddns:${ARCH}"
-        docker push "${DOCKER_USER}/porkbun-ddns:${VERSION}-${ARCH}-${BUILD_NR}"
-        docker push "${DOCKER_USER}/porkbun-ddns:${VERSION}-${ARCH}"
-        docker push "${DOCKER_USER}/porkbun-ddns:${ARCH}"
+        docker tag "${DOCKER_USER}/${NAME}:${VERSION}-${ARCH}-${BUILD_NR}" "${DOCKER_USER}/${NAME}:${VERSION}-${ARCH}"
+        docker tag "${DOCKER_USER}/${NAME}:${VERSION}-${ARCH}-${BUILD_NR}" "${DOCKER_USER}/${NAME}:${ARCH}"
+        docker push "${DOCKER_USER}/${NAME}:${VERSION}-${ARCH}-${BUILD_NR}"
+        docker push "${DOCKER_USER}/${NAME}:${VERSION}-${ARCH}"
+        docker push "${DOCKER_USER}/${NAME}:${ARCH}"
 
   Shared-Manifest:
     if: github.event_name == 'release'
@@ -127,27 +131,28 @@ jobs:
         DOCKER_USER: ${{ vars.DOCKER_HUB_USERNAME }}
         BUILD_NR: ${{ github.run_number }}
         VERSION: ${{ needs.Setup.outputs.version }}
+        NAME: ${{ needs.Setup.outputs.name }}
       run: |
         echo ""
         echo "============================================================="
-        echo "Pushing shared manifest: ${DOCKER_USER}/porkbun-ddns:${VERSION}"
+        echo "Pushing shared manifest: ${DOCKER_USER}/${NAME}:${VERSION}"
         echo "============================================================="
         echo ""
         echo "#!/bin/bash" > push-shared-tags.sh
-        echo -n "docker manifest create ${DOCKER_USER}/porkbun-ddns:${VERSION}" >> push-shared-tags.sh
+        echo -n "docker manifest create ${DOCKER_USER}/${NAME}:${VERSION}" >> push-shared-tags.sh
         while read -r PLATFORM; do
           ARCH=$(echo "${PLATFORM}" | awk -F  "/" '{print $2$3}')
-          echo -n " ${DOCKER_USER}/porkbun-ddns:${VERSION}-${ARCH}-${BUILD_NR}" >> push-shared-tags.sh
+          echo -n " ${DOCKER_USER}/${NAME}:${VERSION}-${ARCH}-${BUILD_NR}" >> push-shared-tags.sh
         done <<< "$(cat .github/platforms.json | jq -r '.platforms | join("\n")')"
         echo "" >> push-shared-tags.sh
-        echo -n "docker manifest create ${DOCKER_USER}/porkbun-ddns:latest" >> push-shared-tags.sh
+        echo -n "docker manifest create ${DOCKER_USER}/${NAME}:latest" >> push-shared-tags.sh
         while read -r PLATFORM; do
           ARCH=$(echo "${PLATFORM}" | awk -F  "/" '{print $2$3}')
-          echo -n " ${DOCKER_USER}/porkbun-ddns:${VERSION}-${ARCH}-${BUILD_NR}" >> push-shared-tags.sh
+          echo -n " ${DOCKER_USER}/${NAME}:${VERSION}-${ARCH}-${BUILD_NR}" >> push-shared-tags.sh
         done <<< "$(cat .github/platforms.json | jq -r '.platforms | join("\n")')"
         echo "" >> push-shared-tags.sh
-        echo "docker manifest push ${DOCKER_USER}/porkbun-ddns:${VERSION}" >> push-shared-tags.sh
-        echo "docker manifest push ${DOCKER_USER}/porkbun-ddns:latest" >> push-shared-tags.sh
+        echo "docker manifest push ${DOCKER_USER}/${NAME}:${VERSION}" >> push-shared-tags.sh
+        echo "docker manifest push ${DOCKER_USER}/${NAME}:latest" >> push-shared-tags.sh
         cat push-shared-tags.sh
         chmod +x ./push-shared-tags.sh
         ./push-shared-tags.sh
