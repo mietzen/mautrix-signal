@@ -1,15 +1,14 @@
 
-FROM docker.io/library/golang:1.18-alpine as signaldctl
+FROM docker.io/library/golang:1.18-alpine3.17 as signaldctl
 
-RUN apk add --no-cache alpine-sdk
+RUN apk add --no-cache g++ make git
 
 WORKDIR /src
 RUN git clone https://gitlab.com/signald/signald-go.git . && make signaldctl
 
-FROM docker.io/library/gradle:7-jdk17 AS build
+FROM docker.io/alpine:3.17 AS build
 
-RUN apt-get update && apt-get install jq -y && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache jq curl openjdk17 gradle git
 
 RUN SIGNALD_VERSION=$(curl -s https://gitlab.com/api/v4/projects/7028347/releases/ | jq '.[]' | jq -r '.name' | head -1) && \
     git clone https://gitlab.com/signald/signald.git /tmp/src && \
@@ -17,11 +16,7 @@ RUN SIGNALD_VERSION=$(curl -s https://gitlab.com/api/v4/projects/7028347/release
 
 WORKDIR /tmp/src
 
-ARG CI_BUILD_REF_NAME
-ARG CI_COMMIT_SHA
-ARG USER_AGENT
-
-RUN VERSION=$(./version.sh) gradle -Dorg.gradle.daemon=false runtime
+RUN VERSION=$(./version.sh) gradle -Dorg.gradle.daemon=false -stacktrace runtime
 
 FROM dock.mau.dev/mautrix/signal:v0.4.3
 
