@@ -6,7 +6,7 @@ RUN apk add --no-cache alpine-sdk
 WORKDIR /src
 RUN git clone https://gitlab.com/signald/signald-go.git . && make signaldctl
 
-FROM docker.io/library/gradle:7-jdk17-alpine AS build
+FROM docker.io/library/gradle:8-jdk17-alpine AS build
 
 RUN apk add --no-cache jq alpine-sdk
 
