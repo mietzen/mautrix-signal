@@ -8,7 +8,7 @@ RUN git clone https://gitlab.com/signald/signald-go.git . && make signaldctl
 
 FROM docker.io/alpine:3.17 AS build
 
-RUN apk add --no-cache jq curl openjdk17 gradle git
+RUN apk add --no-cache jq curl openjdk17 make git
 
 RUN SIGNALD_VERSION=$(curl -s https://gitlab.com/api/v4/projects/7028347/releases/ | jq '.[]' | jq -r '.name' | head -1) && \
     git clone https://gitlab.com/signald/signald.git /tmp/src && \
@@ -16,13 +16,15 @@ RUN SIGNALD_VERSION=$(curl -s https://gitlab.com/api/v4/projects/7028347/release
 
 WORKDIR /tmp/src
 
-RUN VERSION=$(./version.sh) gradle -Dorg.gradle.daemon=false -stacktrace runtime
+RUN make installDist
 
 FROM dock.mau.dev/mautrix/signal:v0.4.3
 
-COPY --from=build /tmp/src/build/image /
+COPY --from=build /tmp/src/build/install/signald/bin/signald /bin/signald
 COPY --from=signaldctl /src/signaldctl /bin/signaldctl
 COPY ./entrypoint.sh /entrypoint.sh 
+
+RUN apk add --no-cache openjdk17
 
 RUN /bin/signaldctl config set socketpath /var/run/signald.sock
 
