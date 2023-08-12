@@ -51,11 +51,6 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
-    - name: Install Perquisites
-      run: |
-        curl https://omnitruck.chef.io/install.sh | sudo bash -s -- -P inspec
-        inspec --chef-license=accept
-
     - name: Build
       env:
         DOCKER_USER: ${{ vars.DOCKER_HUB_USERNAME }}
@@ -73,9 +68,8 @@ jobs:
         docker buildx build \
           --tag "${DOCKER_USER}/${NAME}:${VERSION}-${ARCH}-${BUILD_NR}" \
           --platform ${PLATFORM} \
-          --build-arg PORKBUN_DDNS_VERSION=${VERSION} \
           --load \
-          -f ./Docker/Dockerfile .
+          -f ./Dockerfile .
 
     - name: Login to Docker Hub
       if: github.event_name == 'release'
