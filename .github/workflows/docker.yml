@@ -2,6 +2,7 @@ name: Build & Upload Docker Image
 
 on:
   pull_request:
+  workflow_dispatch:
   release:
     types: [published]
 
