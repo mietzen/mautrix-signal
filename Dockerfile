@@ -1,5 +1,5 @@
 
-FROM docker.io/library/golang:1.18-alpine as signaldctl
+FROM docker.io/library/golang:1.21-alpine as signaldctl
 
 RUN apk add --no-cache alpine-sdk
 
