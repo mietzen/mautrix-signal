@@ -18,7 +18,7 @@ RUN mkdir /opt/gradle && \
     unzip -d /opt/gradle /tmp/gradle-7.6.1-bin.zip
 
 WORKDIR /tmp/src
-RUN VERSION=$(./version.sh) /opt/gradle/gradle-7.3.3/bin/gradle -Dorg.gradle.daemon=false runtime
+RUN VERSION=$(./version.sh) /opt/gradle/gradle-7.6.1/bin/gradle -Dorg.gradle.daemon=false runtime
 
 FROM dock.mau.dev/mautrix/signal:v0.4.3
 
