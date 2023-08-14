@@ -6,10 +6,10 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 cd ${SCRIPT_DIR}
 
-git clean -Fxd
+#git clean -fxd
 
 echo "Setup"
-docker run --rm -d \ 
+docker run --rm \
     --platform ${PLATFORM} \
     --volume ${SCRIPT_DIR}/fixtures/mautrix-signal:/data \
     docker.io/mietzen/mautrix-signal:v0.4.3

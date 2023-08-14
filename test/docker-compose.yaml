@@ -16,6 +16,8 @@ services:
       - ./fixtures/mautrix-signal:/data
     networks:
       - matrix
+    depends_on: 
+      - synapse
 
 networks:
   matrix:
