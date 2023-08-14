@@ -13,12 +13,12 @@ RUN SIGNALD_VERSION=$(curl -s https://gitlab.com/api/v4/projects/7028347/release
     git clone https://gitlab.com/signald/signald.git /tmp/src && \
     cd /tmp/src && git checkout $SIGNALD_VERSION
 
-ADD https://services.gradle.org/distributions/gradle-7.6.1-bin.zip /tmp/gradle-7.6.1-bin.zip
+ADD https://services.gradle.org/distributions/gradle-7.3.3-bin.zip /tmp/gradle-7.3.3-bin.zip
 RUN mkdir /opt/gradle && \
-    unzip -d /opt/gradle /tmp/gradle-7.6.1-bin.zip
+    unzip -d /opt/gradle /tmp/gradle-7.3.3-bin.zip
 
 WORKDIR /tmp/src
-RUN VERSION=$(./version.sh) /opt/gradle/gradle-7.6.1/bin/gradle -Dorg.gradle.daemon=false runtime
+RUN VERSION=$(./version.sh) /opt/gradle/gradle-7.3.3/bin/gradle -Dorg.gradle.daemon=false runtime
 
 FROM dock.mau.dev/mautrix/signal:v0.4.3
 
