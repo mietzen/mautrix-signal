@@ -5,6 +5,9 @@ services:
     image: matrixdotorg/synapse:latest
     container_name: synapse
     platform: "${PLATFORM}"
+    environment:
+      - UID=${UID}
+      - GID=${GID}
     volumes:
       - ./fixtures/synapse:/data
       - ./fixtures/mautrix-signal/registration.yaml:/data/registration.yaml
