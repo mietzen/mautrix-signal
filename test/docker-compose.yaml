@@ -4,7 +4,7 @@ services:
   synapse:
     image: matrixdotorg/synapse:latest
     container_name: synapse
-    platform: linux/arm64
+    platform: "${PLATFORM}"
     volumes:
       - ./fixtures/synapse:/data
       - ./fixtures/mautrix-signal/registration.yaml:/data/registration.yaml
@@ -13,7 +13,7 @@ services:
   mautrix-signal:
     image: "${IMAGE}"
     container_name: mautrix-signal
-    platform: linux/arm64
+    platform: "${PLATFORM}"
     volumes:
       - ./fixtures/mautrix-signal:/data
     networks:
