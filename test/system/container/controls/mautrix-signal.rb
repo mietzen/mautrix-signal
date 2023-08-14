@@ -11,3 +11,8 @@ describe processes(Regexp.new("java")) do
   its('users') { should include '1337' }
   its('pids') { should cmp "7"}
 end
+
+describe port(29328) do
+  its('protocols') { should include 'tcp' }
+  its('addresses') { should include '0.0.0.0' }
+end
