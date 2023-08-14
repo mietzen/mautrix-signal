@@ -2,6 +2,7 @@
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 STATUS=0
+IMAGE="${DOCKER_USER}/mautrix-signal:${VERSION}-${ARCH}-${BUILD_NR}"
 cd ${SCRIPT_DIR}
 
 echo ""
@@ -12,7 +13,7 @@ echo ""
 docker run --rm \
     --platform ${PLATFORM} \
     --volume ${SCRIPT_DIR}/fixtures/mautrix-signal:/data \
-    docker.io/mietzen/mautrix-signal:v0.4.3
+    ${IMAGE}
 echo ""
 docker compose up -d
 

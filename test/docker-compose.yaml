@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   synapse:
     image: matrixdotorg/synapse:latest
@@ -9,7 +11,7 @@ services:
     networks:
       - matrix
   mautrix-signal:
-    image: docker.io/mietzen/mautrix-signal:v0.4.3
+    image: "${IMAGE}"
     container_name: mautrix-signal
     platform: linux/arm64
     volumes:
