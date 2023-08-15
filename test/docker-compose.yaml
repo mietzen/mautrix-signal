@@ -10,7 +10,6 @@ services:
       - GID=${GID}
     volumes:
       - ./fixtures/synapse:/data
-      - ./fixtures/mautrix-signal/registration.yaml:/data/registration.yaml
     networks:
       - matrix
   mautrix-signal:

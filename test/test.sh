@@ -3,8 +3,8 @@
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 STATUS=0
 
-export UID=$(id -u)
-export GID=$(id -g)
+export UID
+export GID
 
 export IMAGE="${DOCKER_USER}/mautrix-signal:${VERSION}-${ARCH}-${BUILD_NR}"
 cd ${SCRIPT_DIR}
@@ -18,6 +18,7 @@ docker run --rm \
     --platform ${PLATFORM} \
     --volume ${SCRIPT_DIR}/fixtures/mautrix-signal:/data \
     ${IMAGE}
+cp ${SCRIPT_DIR}/fixtures/mautrix-signal/registration.yaml ${SCRIPT_DIR}/fixtures/synapse/registration.yaml
 echo ""
 docker compose up -d
 
