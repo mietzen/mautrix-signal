@@ -20,7 +20,7 @@ services:
     networks:
       - matrix
   mautrix-signal:
-    image: "mietzen/mautrix-signal:latest"
+    image: mietzen/mautrix-signal:latest
     container_name: mautrix-signal
     volumes:
       - ./mautrix-signal:/data
