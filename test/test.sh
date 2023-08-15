@@ -30,16 +30,23 @@ while [ ${COUNTER} -le 60 ]; do
 
 if $(docker logs mautrix-signal 2>&1 | grep -q "Connected to signald") && \
     $(docker logs synapse 2>&1 | grep -q "No more background updates to do. Unscheduling background update task"); then
+    echo ""
     echo "Stack is ready! breaking wait loop..."
     break 
 else
     echo "..."
-    docker logs -n 10 synapse
+    echo "Synapse Log:"
+    echo "-------------------"
+    docker logs -n 5 synapse
     echo ""
-    docker logs -n 10 mautrix-signal
+    echo "Mautrix Signal Log:"
+    echo "-------------------"
+    echo ""
+    docker logs -n 5 mautrix-signal
     sleep 10
     COUNTER=$[$COUNTER+1]
     if [ ${COUNTER} -gt 60 ]; then
+        echo ""
         echo "Stack not ready after 10 Minutes, breaking wait loop..."
     fi
 fi
