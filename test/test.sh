@@ -14,6 +14,7 @@ echo "Setup"
 echo "------------------------------------------------------------"
 git clean -fxd
 echo ""
+docker pull --quiet --platform ${PLATFORM} ${IMAGE}
 docker run --rm \
     --platform ${PLATFORM} \
     --volume ${SCRIPT_DIR}/fixtures/mautrix-signal:/data \
