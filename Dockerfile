@@ -40,6 +40,8 @@ RUN adduser --disabled-password --uid 1337 signald && \
     chown -R signald:signald /signald && \
     chown signald:signald /var/run/signald
 
+RUN sed -i 's:/signald/signald.sock:/var/run/signald/signald.sock:g' /opt/mautrix-signal/docker-run.sh
+
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
