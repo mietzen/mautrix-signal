@@ -20,7 +20,7 @@ services:
     networks:
       - matrix
   mautrix-signal:
-    image: "mietzen/mautrix-signal:latest"
+    image: mietzen/mautrix-signal:latest
     container_name: mautrix-signal
     volumes:
       - ./mautrix-signal:/data
@@ -34,9 +34,9 @@ networks:
 ```
 For configuration see: [Mautrix-Docs](https://docs.mau.fi/bridges/python/signal/docker-setup.html)
 
-### License 
+### License:
 [AGPL-3.0](LICENSE)
 
-#### Dependencies:
-- mautrix/signal: [AGPL-3.0](https://mau.dev/mautrix/signal/-/blob/master/LICENSE)
-- signald: [GPL-3.0](https://gitlab.com/signald/signald/-/blob/main/LICENSE?ref_type=heads)
+### Dependencies:
+- [mautrix/signal](https://mau.dev/mautrix/signal/): [AGPL-3.0](https://mau.dev/mautrix/signal/-/blob/master/LICENSE)
+- [signald](https://gitlab.com/signald/signald): [GPL-3.0](https://gitlab.com/signald/signald/-/blob/main/LICENSE?ref_type=heads)
