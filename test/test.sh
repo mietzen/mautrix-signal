@@ -3,8 +3,12 @@
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 STATUS=0
 
+
+echo "$(id -u)"
+echo "$(id -g)"
+
 export UID
-export GID=$(ig -g)
+export GID=1337
 
 export IMAGE="${DOCKER_USER}/mautrix-signal:${VERSION}-${ARCH}-${BUILD_NR}"
 cd ${SCRIPT_DIR}
