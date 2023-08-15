@@ -1,3 +1,8 @@
+FROM registry.gitlab.com/signald/signald:0.23.2 AS signald
+
+RUN signald --version > /signald/version.json
+
+
 FROM docker.io/library/golang:1.18-alpine3.17 as signaldctl
 
 RUN apk add --no-cache alpine-sdk
@@ -6,11 +11,13 @@ WORKDIR /src
 RUN git clone https://gitlab.com/signald/signald-go.git . && \
     make signaldctl
 
+
 FROM docker.io/library/amazoncorretto:17-alpine3.17 AS build
 
-RUN apk add --no-cache jq curl git zip
+COPY --from=signald /signald/version.json /tmp/version.json
 
-RUN SIGNALD_VERSION=$(curl -s https://gitlab.com/api/v4/projects/7028347/releases/ | jq '.[]' | jq -r '.name' | head -1) && \
+RUN apk add --no-cache jq git zip
+RUN SIGNALD_VERSION=$(cat /tmp/version.json | jq .version -r) && \
     git clone https://gitlab.com/signald/signald.git /tmp/src && \
     cd /tmp/src && \
     git checkout $SIGNALD_VERSION
@@ -22,7 +29,13 @@ RUN mkdir /opt/gradle && \
 WORKDIR /tmp/src
 RUN VERSION=$(./version.sh) /opt/gradle/gradle-7.3.3/bin/gradle -Dorg.gradle.daemon=false runtime
 
+
 FROM dock.mau.dev/mautrix/signal:v0.4.3
+
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
+ENV UID=1337 GID=1337
 
 # Somehow needed, otherwise we end up with: 
 # Error: Unable to initialize main class io.finn.signald.Main
@@ -39,13 +52,7 @@ RUN adduser --disabled-password --uid 1337 signald && \
     mkdir /var/run/signald && \
     chown -R signald:signald /signald && \
     chown signald:signald /var/run/signald
-
 RUN sed -i 's:/signald/signald.sock:/var/run/signald/signald.sock:g' /opt/mautrix-signal/docker-run.sh
-
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
-ENV UID=1337 GID=1337
 
 USER signald
 RUN /bin/signaldctl config set socketpath /var/run/signald/signald.sock
