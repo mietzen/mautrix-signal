@@ -51,6 +51,11 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
+    - name: Install Perquisites
+      run: |
+        curl https://omnitruck.chef.io/install.sh | sudo bash -s -- -P inspec
+        inspec --chef-license=accept
+
     - name: Build
       env:
         DOCKER_USER: ${{ vars.DOCKER_HUB_USERNAME }}
@@ -70,6 +75,24 @@ jobs:
           --platform ${PLATFORM} \
           --load \
           -f ./Dockerfile .
+
+    - name: Test
+      env:
+        DOCKER_USER: ${{ vars.DOCKER_HUB_USERNAME }}
+        BUILD_NR: ${{ github.run_number }}
+        PLATFORM: ${{ matrix.platforms }}
+        VERSION: ${{ needs.Setup.outputs.version }}
+        NAME: ${{ needs.Setup.outputs.name }}
+      run: |
+        set -a
+        ARCH=$(echo "${PLATFORM}" | awk -F  "/" '{print $2$3}')
+        echo ""
+        echo "============================================================="
+        echo "Testing: ${DOCKER_USER}/${NAME}:${VERSION}-${ARCH}-${BUILD_NR}"
+        echo "============================================================="
+        echo ""
+        exec ./test/test.sh
+        echo ""
 
     - name: Login to Docker Hub
       if: github.event_name == 'release'

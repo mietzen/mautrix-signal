@@ -1,0 +1,9 @@
+name: system-test
+title: Host System Test
+maintainer: Nils Stein
+copyright: Nils Stein
+copyright_email: social.nstein@maiblox.org
+license: Apache-2.0
+summary: System test of the mautrix-signal bridge with signald
+version: 0.1.0
+

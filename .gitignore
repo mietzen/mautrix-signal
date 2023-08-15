@@ -1,0 +1,4 @@
+test/fixtures/mautrix-signal/bridge.db*
+test/fixtures/mautrix-signal/registration.yaml
+test/fixtures/synapse/homeserver.db*
+test/fixtures/synapse/registration.yaml
