@@ -32,6 +32,7 @@ COPY --from=build /tmp/src/build/image /
 COPY --from=signaldctl /src/signaldctl /bin/signaldctl
 COPY ./entrypoint.sh /entrypoint.sh 
 
+# TODO: run as non-root user
 RUN /bin/signaldctl config set socketpath /var/run/signald.sock
 
 VOLUME /signald
