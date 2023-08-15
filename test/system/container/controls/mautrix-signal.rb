@@ -2,15 +2,13 @@ title "Maurirx-Signal System Test"
 
 describe processes(Regexp.new("python3")) do
   it { should exist }
-  its('users') { should include '1337' }
+  its('users') { should include 'signald' }
   its('pids') { should cmp "1"}
 end
 
 describe processes(Regexp.new("java")) do
   it { should exist }
-  # TODO: run as non-root user
-  # its('users') { should include '1337' }
-  its('users') { should include 'root' }
+  its('users') { should include 'signald' }
   its('pids') { should_not cmp "1"}
 end
 
