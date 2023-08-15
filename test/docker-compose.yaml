@@ -6,8 +6,8 @@ services:
     container_name: synapse
     platform: "${PLATFORM}"
     environment:
-      - UID=${UID}
-      - GID=${GID}
+      - UID=${USER_ID}
+      - GID=${GROUPE_ID}
     volumes:
       - ./fixtures/synapse:/data
     networks:
