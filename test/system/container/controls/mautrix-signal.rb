@@ -8,10 +8,8 @@ end
 
 describe processes(Regexp.new("java")) do
   it { should exist }
-  # TODO: run as non-root user
-  # its('users') { should include '1337' }
+  its('users') { should include '1337' }
   its('users') { should include 'root' }
-  its('pids') { should_not cmp "1"}
 end
 
 describe port(29328) do

@@ -32,9 +32,16 @@ COPY --from=build /tmp/src/build/image /
 COPY --from=signaldctl /src/signaldctl /bin/signaldctl
 COPY ./entrypoint.sh /entrypoint.sh 
 
-# TODO: run as non-root user
-RUN /bin/signaldctl config set socketpath /var/run/signald.sock
+RUN adduser -u 1337 signald && mkdir /signald && chown -R signald:signald /signald
 
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
+ENV UID=1337 GID=1337
+
+USER signald
+RUN /bin/signaldctl config set socketpath /var/run/signald.sock
 VOLUME /signald
 
+USER root
 CMD ["sh", "/entrypoint.sh"]
