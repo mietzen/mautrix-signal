@@ -70,7 +70,8 @@ echo ""
 echo "Teardown"
 echo "------------------------------------------------------------"
 echo ""
-docker compose down --remove-orphans --volumes 
+docker compose down --remove-orphans --volumes
+git clean -fxd
 echo ""
 
 echo ""

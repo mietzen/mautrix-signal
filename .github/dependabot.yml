@@ -6,4 +6,4 @@ updates:
       interval: "weekly"
     ignore:
       - dependency-name: "library/golang"
-      - dependency-name: "library/gradle"
+      - dependency-name: "library/amazoncorretto"
