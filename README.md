@@ -33,3 +33,10 @@ networks:
   matrix:
 ```
 For configuration see: [Mautrix-Docs](https://docs.mau.fi/bridges/python/signal/docker-setup.html)
+
+### License 
+[AGPL-3.0](LICENSE)
+
+#### Dependencies:
+- mautrix/signal: [AGPL-3.0](https://mau.dev/mautrix/signal/-/blob/master/LICENSE)
+- signald: [GPL-3.0](https://gitlab.com/signald/signald/-/blob/main/LICENSE?ref_type=heads)
