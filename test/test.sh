@@ -14,13 +14,13 @@ echo "Setup"
 echo "------------------------------------------------------------"
 git clean -fxd
 echo ""
+docker pull --quiet --platform ${PLATFORM} synapse
 docker run --rm \
     --platform ${PLATFORM} \
     --volume ${SCRIPT_DIR}/fixtures/mautrix-signal:/data \
     ${IMAGE}
 cp ${SCRIPT_DIR}/fixtures/mautrix-signal/registration.yaml ${SCRIPT_DIR}/fixtures/synapse/registration.yaml
 echo ""
-docker compose pull --quiet
 docker compose up -d
 
 echo ""
