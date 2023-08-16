@@ -10,6 +10,11 @@ jobs:
     name: "Draft Release"
     runs-on: "ubuntu-latest"
     steps:
+      - id: get-version
+        run: |
+          LATEST_TAG=$(git describe --tags --abbrev=0)
+          URL='https://gist.githubusercontent.com/mietzen/cd33efb65f91619201a45ac50dcfc29e/raw/bump-version'
+          echo "version=v$(wget -qO - ${URL} | bash -s ${LATEST_TAG} minor)" >> $GITHUB_OUTPUT
       - uses: tibdex/github-app-token@v1
         id: generate-token
         with:
@@ -19,7 +24,6 @@ jobs:
         with:
           token: ${{ steps.generate-token.outputs.token }}
           draft: true
-          tag_name: 'latest'
-          prerelease: true
+          tag_name: ${{ steps.get-version.outputs.version }}
           name: 'Latest Mautrix-Signal'
           generate_release_notes: true
