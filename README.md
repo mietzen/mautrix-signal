@@ -23,7 +23,8 @@ services:
     image: mietzen/mautrix-signal:latest
     container_name: mautrix-signal
     volumes:
-      - ./mautrix-signal:/data
+      - ./mautrix-signal/data:/data
+      - ./mautrix-signal/signald:/signald
     networks:
       - matrix
     depends_on: 
