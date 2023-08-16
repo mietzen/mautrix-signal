@@ -63,8 +63,8 @@ docker exec -u 0 mautrix-signal apk add --no-cache procps || STATUS=1
 echo ""
 echo "Test"
 echo "------------------------------------------------------------"
-inspec exec ./system/host || STATUS=1
-inspec exec ./system/container -t docker://mautrix-signal || STATUS=1
+inspec exec ./system/host --log-level=debug || STATUS=1
+inspec exec ./system/container -t docker://mautrix-signal --log-level=debug || STATUS=1
 
 echo ""
 echo "Teardown"
