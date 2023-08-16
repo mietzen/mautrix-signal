@@ -12,7 +12,7 @@ jobs:
     steps:
       - id: get-version
         run: |
-          LATEST_TAG=$(git describe --tags --abbrev=0)
+          LATEST_TAG=$(curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest" | jq -r '.name')
           URL='https://gist.githubusercontent.com/mietzen/cd33efb65f91619201a45ac50dcfc29e/raw/bump-version'
           echo "version=v$(wget -qO - ${URL} | bash -s ${LATEST_TAG} minor)" >> $GITHUB_OUTPUT
       - uses: tibdex/github-app-token@v1
