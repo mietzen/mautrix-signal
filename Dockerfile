@@ -32,6 +32,11 @@ RUN VERSION=$(./version.sh) /opt/gradle/gradle-7.3.3/bin/gradle -Dorg.gradle.dae
 
 FROM dock.mau.dev/mautrix/signal:v0.4.3
 
+LABEL org.opencontainers.image.authors = "Nils Stein"
+LABEL org.opencontainers.image.licenses = "AGPL-3.0"
+LABEL org.opencontainers.image.title = "mautrix-signal"
+LABEL org.opencontainers.image.description = "mautrix/signal with integrated signald"
+
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
