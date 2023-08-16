@@ -1,15 +1,14 @@
 title "Maurirx-Signal Host System Test"
 
-# TODO: inspec Bug: https://github.com/inspec/inspec/issues/6595
-# describe docker_container('mautrix-signal') do
-#   it { should exist }
-#   it { should be_running }
-# end
-# 
-# describe docker_container('synapse') do
-#   it { should exist }
-#   it { should be_running }
-# end
+describe docker_container('mautrix-signal') do
+  it { should exist }
+  it { should be_running }
+end
+
+describe docker_container('synapse') do
+  it { should exist }
+  it { should be_running }
+end
 
 describe command('docker logs synapse 2>&1 | grep -o "No more background updates to do. Unscheduling background update task"') do
   its('stdout') { should eq "No more background updates to do. Unscheduling background update task\n" }
