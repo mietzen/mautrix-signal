@@ -23,7 +23,5 @@ jobs:
       - uses: "softprops/action-gh-release@v1"
         with:
           token: ${{ steps.generate-token.outputs.token }}
-          draft: true
           tag_name: ${{ steps.get-version.outputs.version }}
-          name: 'Latest Mautrix-Signal'
           generate_release_notes: true
