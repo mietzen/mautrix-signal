@@ -30,7 +30,7 @@ WORKDIR /tmp/src
 RUN VERSION=$(./version.sh) /opt/gradle/gradle-7.3.3/bin/gradle -Dorg.gradle.daemon=false runtime
 
 
-FROM dock.mau.dev/mautrix/signal:v0.4.3
+FROM dock.mau.dev/mautrix/signal:v0.5.0
 
 LABEL org.opencontainers.image.authors = "Nils Stein"
 LABEL org.opencontainers.image.licenses = "AGPL-3.0"
